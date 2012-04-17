@@ -20,6 +20,12 @@ INF {return tINF;}
 SUP {return tSUP;}
 EQU {return tEQU;}
 PRI {return tPRI;}
+ebp {return tEBP;}
+esp {return tESP;}
+"[" {return tHOOKO;}
+"]" {return tHOOKC;}
+"+" {return tPLUS;}
+"-" {return tMINUS;}
 {INTEGER} {yylval = atoi(yytext); return tINTEGER;}
 \n {}
 . {}

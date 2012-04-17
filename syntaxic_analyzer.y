@@ -4,6 +4,7 @@
 
 #define MAX_INSTRUCTIONS 1024
 #define MEMORY_SIZE 1024
+#define REGISTERS_SIZE 2
 
 void yyerror(char *s);
 
@@ -18,8 +19,15 @@ struct instruction {
        int op3;
 };
 
+enum {
+     REG_EBP = 0,
+     REG_ESP = 1
+};
+
 struct instruction programme[MAX_INSTRUCTIONS] = {};
-int memory[MEMORY_SIZE];
+int memory[MEMORY_SIZE] = {};
+
+int registers[REGISTERS_SIZE] = {};
 
 void iadd(int op1, int op2, int op3);
 void imul(int op1, int op2, int op3);
@@ -35,9 +43,11 @@ void iequ(int op1, int op2, int op3);
 void ipri(int op1, int op2, int op3);
 void set_ins(void (*fun) (int, int, int), int op1, int op2, int op3);
 
+int reg_value(int reg);
+
 %}
 
-%token tADD tMUL tSOU tDIV tCOP tAFC tJMP tJMF tINF tSUP tEQU tPRI tINTEGER
+%token tADD tMUL tSOU tDIV tCOP tAFC tJMP tJMF tINF tSUP tEQU tPRI tEBP tESP tHOOKO tHOOKC tPLUS tMINUS tINTEGER
 
 %start instructions
 
@@ -47,40 +57,50 @@ instructions : instruction instructions {}
 	     |
 	     ;
 
-instruction : tADD tINTEGER tINTEGER tINTEGER {
+address : tINTEGER {$$ = $1;}
+        | tHOOKO register tHOOKC tPLUS tINTEGER {$$ = reg_value($2) + $5;}
+        | tHOOKO register tHOOKC tMINUS tINTEGER {$$ = reg_value($2) + $5;}
+	| tHOOKO register tHOOKC {$$ = reg_value($2);}
+        ;
+
+register : tEBP {$$ = $1;}
+         | tESP {$$ = $1;}
+	 ;
+
+instruction : tADD address address address {
   	      	   set_ins(iadd, $2, $3, $4);
 	    }
-	    | tMUL tINTEGER tINTEGER tINTEGER {
+	    | tMUL address address address {
 	      	   set_ins(imul, $2, $3, $4);
 	    }
-	    | tSOU tINTEGER tINTEGER tINTEGER {
+	    | tSOU address address address {
 	      	   set_ins(isou, $2, $3, $4);
 	    }
-	    | tDIV tINTEGER tINTEGER tINTEGER {
+	    | tDIV address address address {
 	      	   set_ins(idiv, $2, $3, $4);
 	    }
-	    | tCOP tINTEGER tINTEGER {
+	    | tCOP address address {
 	      	   set_ins(icop, $2, $3, 0);
 	    }
-	    | tAFC tINTEGER tINTEGER {
+	    | tAFC address tINTEGER {
 	      	   set_ins(iafc, $2, $3, 0);
 	    }
-	    | tJMP tINTEGER {
+	    | tJMP address {
 	      	   set_ins(ijmp, $2, 0, 0);
 	    }
-	    | tJMF tINTEGER tINTEGER {
+	    | tJMF address address {
 	      	   set_ins(ijmf, $2, $3, 0);
 	    }
-	    | tINF tINTEGER tINTEGER tINTEGER {
+	    | tINF address address address {
 	      	   set_ins(iinf, $2, $3, $4);
 	    }
-	    | tSUP tINTEGER tINTEGER tINTEGER {
+	    | tSUP address address address {
 	      	   set_ins(isup, $2, $3, $4);
 	    }
-	    | tEQU tINTEGER tINTEGER tINTEGER {
+	    | tEQU address address address {
 	      	   set_ins(iequ, $2, $3, $4);
 	    }
-	    | tPRI tINTEGER {
+	    | tPRI address {
 	      	   set_ins(ipri, $2, 0, 0);
 	    }
 	    ;
@@ -165,6 +185,17 @@ void set_ins(void (*fun) (int, int, int), int op1, int op2, int op3) {
      i.op3 = op3;
      programme[compteur] = i;
      compteur++;
+}
+
+int reg_value(int reg) {
+    switch(reg) {
+    case tEBP : 
+    	 return registers[REG_EBP];
+    case tESP : 
+    	 return registers[REG_ESP];
+    default :
+    	 return 0;
+    }
 }
 
 int main(int argc, char **argv) {
