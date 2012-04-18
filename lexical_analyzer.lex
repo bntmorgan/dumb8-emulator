@@ -20,13 +20,15 @@ INF {return tINF;}
 SUP {return tSUP;}
 EQU {return tEQU;}
 PRI {return tPRI;}
-ebp {return tEBP;}
-esp {return tESP;}
+PSH {return tPSH;}
+POP {return tPOP;}
+ebp {yylval.entier = REG_EBP; return tEBP;}
+esp {yylval.entier = REG_ESP; return tESP;}
 "[" {return tHOOKO;}
 "]" {return tHOOKC;}
 "+" {return tPLUS;}
 "-" {return tMINUS;}
-{INTEGER} {yylval = atoi(yytext); return tINTEGER;}
+{INTEGER} {yylval.entier = atoi(yytext); return tINTEGER;}
 \n {}
 . {}
 

@@ -1,0 +1,4 @@
+AFC 3 12
+PSH 3
+POP 4
+PRI 4
