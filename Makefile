@@ -9,8 +9,11 @@ test_stack: asm_interpreter
 test_reg : asm_interpreter
 	cat test_reg.s | ./asm_interpreter
 
+test_call : asm_interpreter
+	cat test_call.s | ./asm_interpreter
+
 yacc : syntaxic_analyzer.y
-	yacc -d -o syntaxic_analyzer.c syntaxic_analyzer.y
+	bison -d -o syntaxic_analyzer.c syntaxic_analyzer.y
 
 lex : lexical_analyzer.lex
 	lex -o lexical_analyzer.c lexical_analyzer.lex

@@ -22,6 +22,8 @@ EQU {return tEQU;}
 PRI {return tPRI;}
 PSH {return tPSH;}
 POP {return tPOP;}
+CAL {return tCAL;}
+RET {return tRET;}
 ebp {yylval.entier = REG_EBP; return tEBP;}
 esp {yylval.entier = REG_ESP; return tESP;}
 "[" {return tHOOKO;}

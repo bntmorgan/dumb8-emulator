@@ -99,6 +99,41 @@ void ipop(struct parameter *op1, struct parameter *op2, struct parameter *op3) {
   regs[REG_ESP]++;
 }
 
+void ical(struct parameter *op1, struct parameter *op2, struct parameter *op3) {
+	// Push de l'adresse de retour
+	struct parameter ret;
+	ret.type = PARAM_VALUE;
+	//On stocke compteur_exe et pas compteur_exe+1
+	//(voir incrementation dans exe())
+	ret.value.val = compteur_exe;
+	ipsh(&ret,NULL,NULL);
+	
+	// Saut a l'adresse de la fonction appelee
+	ijmp(op1,NULL,NULL);
+}
+
+/**
+ * iret() est equivalente a l'execution de l'instuction leave suivi de l'instruction ret d'intel
+ */
+void iret(struct parameter *op1, struct parameter *op2, struct parameter *op3) {
+	// Affectation de ebp a esp
+	set_reg_value(regs[REG_ESP],get_reg_value(regs[REG_EBP]));
+	// Depile ebp
+	struct parameter param;
+	param.type = PARAM_REG;
+	param.reg.reg = regs[REG_EBP];
+	ipop(&param,NULL,NULL);
+	
+	struct parameter ret;
+	ret.type = PARAM_ADDRESS;
+	// Affectation de l'adresse de retour avec la valeur en tête de pile
+	ret.address.adr = memory[regs[REG_ESP]];
+	// Pop de la tête de pile
+	regs[REG_ESP]++;
+	
+	ijmp(&ret,NULL,NULL);
+}
+
 void set_ins(void (*fun) (struct parameter *, struct parameter *, struct parameter *), struct parameter *op1, struct parameter *op2, struct parameter *op3) {
   struct instruction i;
   i.fun = fun;

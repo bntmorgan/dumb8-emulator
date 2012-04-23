@@ -17,7 +17,7 @@ void yyerror(char *s);
   #include "interpreter.h"
  }
 
-%token <entier> tADD tMUL tSOU tDIV tCOP tAFC tJMP tJMF tINF tSUP tEQU tPRI tPSH tPOP tEBP tESP tHOOKO tHOOKC tPLUS tMINUS tINTEGER
+%token <entier> tADD tMUL tSOU tDIV tCOP tAFC tJMP tJMF tCAL tRET tINF tSUP tEQU tPRI tPSH tPOP tEBP tESP tHOOKO tHOOKC tPLUS tMINUS tINTEGER
 
 %type <parameter> expression
 %type <entier> registers
@@ -86,7 +86,12 @@ instruction : tADD expression expression expression {
 	    | tPOP expression {
 	      	   set_ins(ipop, &($2), NULL, NULL);
 	    }
-
+	    | tCAL expression {
+	      	   set_ins(ical, &($2), NULL, NULL);
+	    }
+	    | tRET {
+	      	   set_ins(iret, NULL, NULL, NULL);
+	    }
 	    ;
 
 %%

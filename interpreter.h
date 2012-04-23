@@ -75,6 +75,8 @@ void iequ(struct parameter *op1, struct parameter *op2, struct parameter *op3);
 void ipri(struct parameter *op1, struct parameter *op2, struct parameter *op3);
 void ipsh(struct parameter *op1, struct parameter *op2, struct parameter *op3);
 void ipop(struct parameter *op1, struct parameter *op2, struct parameter *op3);
+void ical(struct parameter *op1, struct parameter *op2, struct parameter *op3);
+void iret(struct parameter *op1, struct parameter *op2, struct parameter *op3);
 
 void set_ins(void (*fun) (struct parameter *, struct parameter *, struct parameter *), struct parameter *op1, struct parameter *op2, struct parameter *op3);
 
