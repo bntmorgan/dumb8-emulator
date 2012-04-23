@@ -86,10 +86,10 @@ void ipri(struct parameter *op1, struct parameter *op2, struct parameter *op3) {
 
 
 void ipsh(struct parameter *op1, struct parameter *op2, struct parameter *op3) {
+  // Push de la valeur op1
+  memory[regs[REG_ESP]-1] = get_parameter_value(op1);
   // Tête de pile à la prochaine position
   regs[REG_ESP]--;
-  // Push de la valeur op1
-  memory[regs[REG_ESP]] = get_parameter_value(op1);
 }
 
 void ipop(struct parameter *op1, struct parameter *op2, struct parameter *op3) {
