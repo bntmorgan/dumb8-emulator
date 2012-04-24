@@ -1,16 +1,16 @@
 all : asm_interpreter
 
 test : asm_interpreter
-	cat test.s | ./asm_interpreter
+	./asm_interpreter test.s
 
 test_stack: asm_interpreter
-	cat test_stack.s | ./asm_interpreter
+	./asm_interpreter test_stack.s
 
 test_reg : asm_interpreter
-	cat test_reg.s | ./asm_interpreter
+	./asm_interpreter cat test_reg.s
 
 test_call : asm_interpreter
-	cat test_call.s | ./asm_interpreter
+	./asm_interpreter cat test_call.s
 
 yacc : syntaxic_analyzer.y
 	bison -d -o syntaxic_analyzer.c syntaxic_analyzer.y
@@ -21,5 +21,8 @@ lex : lexical_analyzer.lex
 interpreter: interpreter.c
 	gcc -g -Wall -c interpreter.c
 
-asm_interpreter : yacc lex interpreter
-	gcc -g -Wall -o asm_interpreter interpreter.o lexical_analyzer.c syntaxic_analyzer.c -ll -ly
+options: options.c
+	gcc -g -Wall -c options.c
+
+asm_interpreter : yacc lex interpreter options
+	gcc -g -Wall -o asm_interpreter interpreter.o options.o lexical_analyzer.c syntaxic_analyzer.c -ll -ly

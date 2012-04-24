@@ -101,7 +101,9 @@ void yyerror(char *s){
 }
 
 int main(int argc, char **argv) {
+  do_options();
   yyparse();
   exe();
+  close_files();
   return 0;  
 }
