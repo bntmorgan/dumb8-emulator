@@ -12,8 +12,8 @@ struct instruction programme[MAX_INSTRUCTIONS] = {};
 // Pile
 int memory[MEMORY_SIZE] = {};
 
-// On met ebp et esp au dernier index de la mémoire + 1 (pile vide)
-int regs[REGS_SIZE] = {MEMORY_SIZE, MEMORY_SIZE, 0, 0};
+// On met ebp au dernier index de la mémoire et esp au dernier index de la mémoire + 1 (pile vide)
+int regs[REGS_SIZE] = {MEMORY_SIZE, MEMORY_SIZE};
 
 void exe(){
   compteur_exe = 0;
@@ -100,38 +100,38 @@ void ipop(struct parameter *op1, struct parameter *op2, struct parameter *op3) {
 }
 
 void ical(struct parameter *op1, struct parameter *op2, struct parameter *op3) {
-	// Push de l'adresse de retour
-	struct parameter ret;
-	ret.type = PARAM_VALUE;
-	//On stocke compteur_exe et pas compteur_exe+1
-	//(voir incrementation dans exe())
-	ret.value.val = compteur_exe;
-	ipsh(&ret,NULL,NULL);
-	
-	// Saut a l'adresse de la fonction appelee
-	ijmp(op1,NULL,NULL);
+  // Push de l'adresse de retour
+  struct parameter ret;
+  ret.type = PARAM_VALUE;
+  //On stocke compteur_exe et pas compteur_exe+1
+  //(voir incrementation dans exe())
+  ret.value.val = compteur_exe;
+  ipsh(&ret,NULL,NULL);
+  
+  // Saut a l'adresse de la fonction appelee
+  ijmp(op1,NULL,NULL);
 }
 
 /**
  * iret() est equivalente a l'execution de l'instuction leave suivi de l'instruction ret d'intel
  */
 void iret(struct parameter *op1, struct parameter *op2, struct parameter *op3) {
-	// Affectation de ebp a esp
-	set_reg_value(regs[REG_ESP],get_reg_value(regs[REG_EBP]));
-	// Depile ebp
-	struct parameter param;
-	param.type = PARAM_REG;
-	param.reg.reg = regs[REG_EBP];
-	ipop(&param,NULL,NULL);
-	
-	struct parameter ret;
-	ret.type = PARAM_ADDRESS;
-	// Affectation de l'adresse de retour avec la valeur en tête de pile
-	ret.address.adr = memory[regs[REG_ESP]];
-	// Pop de la tête de pile
-	regs[REG_ESP]++;
-	
-	ijmp(&ret,NULL,NULL);
+  // Affectation de ebp a esp
+  set_reg_value(regs[REG_ESP],get_reg_value(regs[REG_EBP]));
+  // Depile ebp
+  struct parameter param;
+  param.type = PARAM_REG;
+  param.reg.reg = regs[REG_EBP];
+  ipop(&param,NULL,NULL);
+  
+  struct parameter ret;
+  ret.type = PARAM_ADDRESS;
+  // Affectation de l'adresse de retour avec la valeur en tête de pile
+  ret.address.adr = memory[regs[REG_ESP]];
+  // Pop de la tête de pile
+  regs[REG_ESP]++;
+  
+  ijmp(&ret,NULL,NULL);
 }
 
 void set_ins(void (*fun) (struct parameter *, struct parameter *, struct parameter *), struct parameter *op1, struct parameter *op2, struct parameter *op3) {

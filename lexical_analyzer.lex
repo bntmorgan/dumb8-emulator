@@ -32,6 +32,7 @@ ebx {yylval.entier = REG_EBX; return tEBX;}
 "]" {return tHOOKC;}
 "+" {return tPLUS;}
 "-" {return tMINUS;}
+"#" {return tSHARP;}
 {INTEGER} {yylval.entier = atoi(yytext); return tINTEGER;}
 \n {}
 . {}

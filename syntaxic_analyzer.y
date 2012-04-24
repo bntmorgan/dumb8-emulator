@@ -2,6 +2,7 @@
 #include <stdlib.h>
 #include <stdio.h>
 #include "interpreter.h"
+#include "options.h"
 
 void yyerror(char *s);
 
@@ -17,7 +18,7 @@ void yyerror(char *s);
   #include "interpreter.h"
  }
 
-%token <entier> tADD tMUL tSOU tDIV tCOP tAFC tJMP tJMF tCAL tRET tINF tSUP tEQU tPRI tPSH tPOP tEBP tESP tEAX tEBX tHOOKO tHOOKC tPLUS tMINUS tINTEGER
+%token <entier> tADD tMUL tSOU tDIV tCOP tAFC tJMP tJMF tCAL tRET tINF tSUP tEQU tPRI tPSH tPOP tEBP tESP tEAX tEBX tHOOKO tHOOKC tPLUS tMINUS tINTEGER tSHARP
 
 %type <parameter> expression
 %type <entier> registers
@@ -35,6 +36,7 @@ expression : tINTEGER {struct parameter p; p.type = PARAM_ADDRESS; p.address.adr
            | tHOOKO registers tHOOKC tMINUS tINTEGER {struct parameter p; p.type = PARAM_MEMORY_REG; p.memory_reg.reg = $2; p.memory_reg.n = -($5); $$ = p;}
 	   | tHOOKO registers tHOOKC {struct parameter p; p.type = PARAM_MEMORY_REG; p.memory_reg.reg = $2; p.memory_reg.n = 0; $$ = p;}
            | registers {struct parameter p; p.type = PARAM_REG; p.reg.reg = $1; $$ = p;}
+           | tSHARP tINTEGER {struct parameter p; p.type = PARAM_VALUE; p.value.val = $2; $$ = p;}
            ;
 
 registers : tEBP {} //Par defaut $$ = $1
@@ -58,10 +60,10 @@ instruction : tADD expression expression expression {
 	    | tCOP expression expression {
 	      	   set_ins(icop, &($2), &($3), NULL);
 	    }
-	    | tAFC expression tINTEGER {
+	    | tAFC expression tSHARP tINTEGER {
 	           struct parameter p;
 		   p.type = PARAM_VALUE;
-		   p.value.val = $3;
+		   p.value.val = $4;
 	      	   set_ins(iafc, &($2), &(p), NULL);
 	    }
 	    | tJMP expression {
@@ -103,7 +105,9 @@ void yyerror(char *s){
 }
 
 int main(int argc, char **argv) {
+  do_options(argc, argv);
   yyparse();
   exe();
+  close_files();
   return 0;  
 }
