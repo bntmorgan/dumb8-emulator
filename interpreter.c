@@ -13,7 +13,7 @@ struct instruction programme[MAX_INSTRUCTIONS] = {};
 int memory[MEMORY_SIZE] = {};
 
 // On met ebp et esp au dernier index de la mémoire + 1 (pile vide)
-int regs[REGS_SIZE] = {MEMORY_SIZE, MEMORY_SIZE};
+int regs[REGS_SIZE] = {MEMORY_SIZE, MEMORY_SIZE, 0, 0};
 
 void exe(){
   compteur_exe = 0;

@@ -17,7 +17,7 @@ void yyerror(char *s);
   #include "interpreter.h"
  }
 
-%token <entier> tADD tMUL tSOU tDIV tCOP tAFC tJMP tJMF tCAL tRET tINF tSUP tEQU tPRI tPSH tPOP tEBP tESP tHOOKO tHOOKC tPLUS tMINUS tINTEGER
+%token <entier> tADD tMUL tSOU tDIV tCOP tAFC tJMP tJMF tCAL tRET tINF tSUP tEQU tPRI tPSH tPOP tEBP tESP tEAX tEBX tHOOKO tHOOKC tPLUS tMINUS tINTEGER
 
 %type <parameter> expression
 %type <entier> registers
@@ -37,8 +37,10 @@ expression : tINTEGER {struct parameter p; p.type = PARAM_ADDRESS; p.address.adr
            | registers {struct parameter p; p.type = PARAM_REG; p.reg.reg = $1; $$ = p;}
            ;
 
-registers : tEBP {$$ = $1;}
-         | tESP {$$ = $1;}
+registers : tEBP {} //Par defaut $$ = $1
+         | tESP {}
+         | tEAX {}
+         | tEBX {}
 	 ;
 
 instruction : tADD expression expression expression {

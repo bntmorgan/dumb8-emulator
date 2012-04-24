@@ -26,6 +26,8 @@ CAL {return tCAL;}
 RET {return tRET;}
 ebp {yylval.entier = REG_EBP; return tEBP;}
 esp {yylval.entier = REG_ESP; return tESP;}
+eax {yylval.entier = REG_EAX; return tEAX;}
+ebx {yylval.entier = REG_EBX; return tEBX;}
 "[" {return tHOOKO;}
 "]" {return tHOOKC;}
 "+" {return tPLUS;}

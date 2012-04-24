@@ -58,7 +58,9 @@ struct instruction {
 // Registres
 enum {
      REG_EBP = 0,
-     REG_ESP = 1
+     REG_ESP = 1,
+     REG_EAX = 2,
+     REG_EBX = 3,
 };
 
 void iadd(struct parameter *op1, struct parameter *op2, struct parameter *op3);
