@@ -30,6 +30,7 @@ esp {yylval.entier = REG_ESP; return tESP;}
 "]" {return tHOOKC;}
 "+" {return tPLUS;}
 "-" {return tMINUS;}
+"#" {return tSHARP;}
 {INTEGER} {yylval.entier = atoi(yytext); return tINTEGER;}
 \n {}
 . {}
