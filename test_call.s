@@ -4,3 +4,4 @@
 	PRI [ebp]
 	AFC [ebp] 5
 	PRI [ebp]	
+	RET
