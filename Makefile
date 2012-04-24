@@ -7,10 +7,10 @@ test_stack: asm_interpreter
 	./asm_interpreter test_stack.s
 
 test_reg : asm_interpreter
-	./asm_interpreter cat test_reg.s
+	./asm_interpreter test_reg.s
 
 test_call : asm_interpreter
-	./asm_interpreter cat test_call.s
+	./asm_interpreter test_call.s
 
 yacc : syntaxic_analyzer.y
 	bison -d -o syntaxic_analyzer.c syntaxic_analyzer.y
