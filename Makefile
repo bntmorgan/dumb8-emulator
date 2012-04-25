@@ -13,7 +13,7 @@ test_call : asm_interpreter
 	./asm_interpreter test_call.s
 
 yacc : syntaxic_analyzer.y
-	bison -d -o syntaxic_analyzer.c syntaxic_analyzer.y
+	bison -d -o syntaxic_analyzer.c syntaxic_analyzer.y #--debug --verbose
 
 lex : lexical_analyzer.lex
 	lex -o lexical_analyzer.c lexical_analyzer.lex

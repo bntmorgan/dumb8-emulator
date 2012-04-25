@@ -104,7 +104,10 @@ void yyerror(char *s){
   fprintf(stderr, "Vous ne maîtrisez pas les concepts : %s\n", s);
 }
 
+//extern int yydebug;
+
 int main(int argc, char **argv) {
+  //yydebug = 1;
   do_options(argc, argv);
   yyparse();
   exe();
