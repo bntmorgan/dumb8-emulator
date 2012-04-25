@@ -36,7 +36,6 @@ expression : tINTEGER {struct parameter p; p.type = PARAM_ADDRESS; p.address.adr
            | tHOOKO registers tHOOKC tMINUS tINTEGER {struct parameter p; p.type = PARAM_MEMORY_REG; p.memory_reg.reg = $2; p.memory_reg.n = -($5); $$ = p;}
 	   | tHOOKO registers tHOOKC {struct parameter p; p.type = PARAM_MEMORY_REG; p.memory_reg.reg = $2; p.memory_reg.n = 0; $$ = p;}
            | registers {struct parameter p; p.type = PARAM_REG; p.reg.reg = $1; $$ = p;}
-           | tSHARP tINTEGER {struct parameter p; p.type = PARAM_VALUE; p.value.val = $2; $$ = p;}
            ;
 
 registers : tEBP {} //Par defaut $$ = $1
