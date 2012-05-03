@@ -1,38 +1,19 @@
-	AFC 1000 0
-	AFC 0 2
-	COP 1 0
-	AFC 2 3
-	COP 3 2
-	PRI 1
-	PRI 3
-	AFC 5 42
-	COP 3 5
-	COP 4 3
-	PRI 1
-	PRI 4
-	PRI 3
-	AFC 6 2
-	AFC 7 0
-	SOU 7 7 3
-	AFC 8 12
-	ADD 9 7 8
-	MUL 10 6 9
-	MUL 11 1 10
-	AFC 12 4
-	DIV 13 11 12
-	COP 14 13
-	PRI 14
-	ADD 15 1 4
-	AFC 16 0
-	SOU 16 16 15
-	AFC 17 2
-	MUL 18 16 17
-	PRI 18
-	
-	AFC 0 1
-	ADD 1000 1000 0
-	PRI 1000
-	AFC 0 3
-	EQU 0 1000 0
-	JMF 0 1
-	
+AFC eax #1
+SOU esp esp eax
+AFC eax #2
+PSH eax
+AFC eax #3
+PSH eax
+AFC eax #2
+PSH eax
+POP ebx
+POP eax
+MUL eax eax ebx
+PSH eax
+POP ebx
+POP eax
+ADD eax eax ebx
+PSH eax
+POP eax
+COP [ebp]-1 eax
+PRI [ebp]-1
