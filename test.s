@@ -1,5 +1,3 @@
-AFC eax #1
-SOU esp esp eax
 AFC eax #2
 PSH eax
 AFC eax #3
