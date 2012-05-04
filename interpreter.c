@@ -32,7 +32,7 @@ int user_next_step() {
   int nok = 1;
   int ret = 0;
   term_mode_raw();
-  printf("[%4d] Continue y / n / a ? ", compteur_exe);
+  verbose_instruction("Continue y / n / a ? ");
   while (nok) {
     c = fgetc(stdin_terminal);
     if (c == 'y') {
@@ -49,7 +49,8 @@ int user_next_step() {
       nok = 0;
       mode_stepper = 0;
     } else {
-      printf("\n[%4d] Continue y / n / a ? ", compteur_exe);
+      printf("\n");
+      verbose_instruction("Continue y / n / a ? ");
     }
   }
   printf("\n");
@@ -63,7 +64,7 @@ void exe(){
   while (programme[compteur_exe].fun != NULL) {
     // On teste si on est sur un breakpoint
     if (mode_breakpoint && breakpoint_stop(compteur_exe)) {
-      printf("[%4d] * \n", compteur_exe);
+      verbose_instruction("*\n");
       mode_stepper = 1;
     }
     // On teste si on est en mode stepper, si on veut continuer
