@@ -1,5 +1,6 @@
 #include <stdlib.h>
 #include <stdio.h>
+#include <stdarg.h>
 #include "options.h"
 #include "interpreter.h"
 #include "syntaxic_analyzer.h"
@@ -15,6 +16,16 @@ int memory[MEMORY_SIZE] = {};
 
 // On met ebp au dernier index de la mémoire et esp au dernier index de la mémoire + 1 (pile vide)
 int regs[REGS_SIZE] = {MEMORY_SIZE, MEMORY_SIZE};
+
+void verbose_instruction(const char *format, ...) {
+  if (mode_verbose) {
+    printf("[%4d] ", compteur_exe);
+    va_list args;
+    va_start (args, format);
+    vprintf(format, args);
+    va_end(args);
+  }
+}
 
 int user_next_step() {
   char c = 0;
@@ -67,60 +78,75 @@ void exe(){
 }
 
 void iadd(struct parameter *op1, struct parameter *op2, struct parameter *op3) {
+  verbose_instruction("ADD %p %d %d\n", get_parameter_address(op1), get_parameter_value(op2), get_parameter_value(op3));
   *(get_parameter_address(op1)) = get_parameter_value(op2) + get_parameter_value(op3);
 }
 
 void imul(struct parameter *op1, struct parameter *op2, struct parameter *op3) {
-  *(get_parameter_address(op1)) = get_parameter_value(op2) * get_parameter_value(op3);
+  verbose_instruction("MUL %p %d %d\n", get_parameter_address(op1), get_parameter_value(op2), get_parameter_value(op3));
+    *(get_parameter_address(op1)) = get_parameter_value(op2) * get_parameter_value(op3);
 }
 
 void isou(struct parameter *op1, struct parameter *op2, struct parameter *op3) {
+  verbose_instruction("SOU %p %d %d\n", get_parameter_address(op1), get_parameter_value(op2), get_parameter_value(op3));
   *(get_parameter_address(op1)) = get_parameter_value(op2) - get_parameter_value(op3);
 }
 
 void idiv(struct parameter *op1, struct parameter *op2, struct parameter *op3) {
+  verbose_instruction("DIV %p %d %d\n", get_parameter_address(op1), get_parameter_value(op2), get_parameter_value(op3));
   *(get_parameter_address(op1)) = get_parameter_value(op2) / get_parameter_value(op3);
 }
 
 void icop(struct parameter *op1, struct parameter *op2, struct parameter *op3) {
+  verbose_instruction("COP %p %d\n", get_parameter_address(op1), get_parameter_value(op2));
   *(get_parameter_address(op1)) = get_parameter_value(op2);
 }
 
 void iafc(struct parameter *op1, struct parameter *op2, struct parameter *op3) {
+  verbose_instruction("AFC %p %d\n", get_parameter_address(op1), get_parameter_value(op2));
   *(get_parameter_address(op1)) = get_parameter_value(op2);
 }
 
 void ijmp(struct parameter *op1, struct parameter *op2, struct parameter *op3) {
   // Traitement spécial pour le jump
   if(op1->type == PARAM_ADDRESS) {
+    verbose_instruction("JMP %d\n", op1->address.adr - 1);
     compteur_exe = op1->address.adr - 1; // A cause du compteur_exe++
   }
 }
 
 void ijmf(struct parameter *op1, struct parameter *op2, struct parameter *op3) {
   if(!get_parameter_value(op1)) {
+    verbose_instruction("JMF false\n");
     ijmp(op2, 0, 0);
+  } else {
+    verbose_instruction("JMF true\n");
   }
 }
 
 void iinf(struct parameter *op1, struct parameter *op2, struct parameter *op3) {
+  verbose_instruction("INF %p %d %d\n", get_parameter_address(op1), get_parameter_value(op2), get_parameter_value(op3));
   *(get_parameter_address(op1)) = (get_parameter_value(op2) < get_parameter_value(op3));
 }
 
 void isup(struct parameter *op1, struct parameter *op2, struct parameter *op3) {
+  verbose_instruction("SUP %p %d %d\n", get_parameter_address(op1), get_parameter_value(op2), get_parameter_value(op3));
   *(get_parameter_address(op1)) = (get_parameter_value(op2) > get_parameter_value(op3));
 }
 
 void iequ(struct parameter *op1, struct parameter *op2, struct parameter *op3) {
+  verbose_instruction("EQU %p %d %d\n", get_parameter_address(op1), get_parameter_value(op2), get_parameter_value(op3));
   *(get_parameter_address(op1)) = (get_parameter_value(op2) == get_parameter_value(op3));
 }
 
 void ipri(struct parameter *op1, struct parameter *op2, struct parameter *op3) {
+  verbose_instruction("PRI %d\n", get_parameter_value(op1));
   printf("%d\n", get_parameter_value(op1));
 }
 
 
 void ipsh(struct parameter *op1, struct parameter *op2, struct parameter *op3) {
+  verbose_instruction("PSH %d\n", get_parameter_value(op1));
   // Push de la valeur op1
   memory[regs[REG_ESP]-1] = get_parameter_value(op1);
   // Tête de pile à la prochaine position
@@ -128,6 +154,7 @@ void ipsh(struct parameter *op1, struct parameter *op2, struct parameter *op3) {
 }
 
 void ipop(struct parameter *op1, struct parameter *op2, struct parameter *op3) {
+  verbose_instruction("POP %p\n", get_parameter_address(op1));
   // Affectation de la zone mémoire op1 avec la valeur en tête de pile
   *(get_parameter_address(op1)) = memory[regs[REG_ESP]];
   // Pop de la tête de pile
@@ -135,9 +162,7 @@ void ipop(struct parameter *op1, struct parameter *op2, struct parameter *op3) {
 }
 
 void ical(struct parameter *op1, struct parameter *op2, struct parameter *op3) {
-  if (mode_verbose) {
-    printf("CAL %d\n", get_parameter_value(op1));
-  }
+  verbose_instruction("CAL %d\n", get_parameter_value(op1));
   // Push de l'adresse de retour
   struct parameter ret;
   ret.type = PARAM_VALUE;
@@ -154,9 +179,7 @@ void ical(struct parameter *op1, struct parameter *op2, struct parameter *op3) {
  * iret() est equivalente a l'execution de l'instuction leave suivi de l'instruction ret d'intel
  */
 void iret(struct parameter *op1, struct parameter *op2, struct parameter *op3) {
-  if (mode_verbose) {
-    printf("RET\n");
-  }
+  verbose_instruction("RET\n");
   // Affectation de ebp a esp
   set_reg_value(REG_ESP, get_reg_value(REG_EBP));
   // Depile ebp

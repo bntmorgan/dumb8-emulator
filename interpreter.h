@@ -107,4 +107,9 @@ void exe();
  */
 int user_next_step();
 
+/**
+ * Verbose une instruction
+ */
+void debug_instruction(const char *format, ...);
+
 #endif//__INTERPRETER_H__
