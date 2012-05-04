@@ -61,6 +61,11 @@ void exe(){
   compteur_exe = 0;
   // Tant que l'on a des instructions
   while (programme[compteur_exe].fun != NULL) {
+    // On teste si on est sur un breakpoint
+    if (mode_breakpoint && breakpoint_stop(compteur_exe)) {
+      printf("[%4d] * \n", compteur_exe);
+      mode_stepper = 1;
+    }
     // On teste si on est en mode stepper, si on veut continuer
     if (mode_stepper && !user_next_step()) {
       break;

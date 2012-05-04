@@ -40,6 +40,17 @@ void term_mode_restore();
  */
 void term_init();
 
+/**
+ * Ajoute un breakpoint
+ */
+void breakpoint_add(int bp);
+
+/**
+ * Regarde si l'adresse courante a un breakpoint
+ * @return 1 to stop 0 else
+ */
+int breakpoint_stop(int line);
+
 // Flags de fonctionnement stepper et verbose
 extern int mode_stepper;
 extern int mode_verbose;

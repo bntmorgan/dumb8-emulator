@@ -68,12 +68,38 @@ void term_mode_restore() {
   tcsetattr(stdin_fd, TCSANOW, &orig_term_attr);
 }
 
+static int cmpint(const void *p1, const void *p2) {
+  return *((int*)p1) > *((int*)p2);
+}
+
+void breakpoint_add(int bp) {
+  if (nb_breakpoints < OPTIONS_BREAKPOINTS) {
+    breakpoints[nb_breakpoints] = atoi(optarg);
+    nb_breakpoints++;
+    // Tri du tableau
+    qsort(&breakpoints, nb_breakpoints, sizeof(int), cmpint);
+  }
+}
+
+int breakpoint_stop(int line) {
+  int i;
+  for (i = 0; i < nb_breakpoints; i++) {
+    if (breakpoints[i] > line) {
+      break;
+    } else if (breakpoints[i] == line) {
+      return 1;
+    }
+  }
+  return 0;
+}
+
 void do_options(int argc, char **argv) {
   int c;
 
   while ((c = getopt (argc, argv, "svb:")) != -1) {
     switch (c) {
     case 'b':
+      breakpoint_add(atoi(optarg));
       mode_breakpoint = 1;
       break;
     case 's':
@@ -113,7 +139,7 @@ void do_options(int argc, char **argv) {
       perror("Error while openning file to compile");
       exit(1);
     }
-    if (mode_stepper) {
+    if (mode_stepper || mode_breakpoint) {
       term_init();
     }
   } else {
