@@ -96,6 +96,15 @@ int *get_parameter_address(struct parameter *op);
  */
 int get_parameter_value(struct parameter *op);
 
+/**
+ * Exécute le programme
+ */
 void exe();
+
+/**
+ * Demande a l'utilisateur la confirmation pour exécuter l'instruction suivante
+ * @return 0 Si on doit arrêter ou 1 pour continuer
+ */
+int user_next_step();
 
 #endif//__INTERPRETER_H__

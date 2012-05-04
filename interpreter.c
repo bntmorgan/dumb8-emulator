@@ -1,5 +1,6 @@
 #include <stdlib.h>
 #include <stdio.h>
+#include "options.h"
 #include "interpreter.h"
 #include "syntaxic_analyzer.h"
 
@@ -15,10 +16,44 @@ int memory[MEMORY_SIZE] = {};
 // On met ebp au dernier index de la mémoire et esp au dernier index de la mémoire + 1 (pile vide)
 int regs[REGS_SIZE] = {MEMORY_SIZE, MEMORY_SIZE};
 
+int user_next_step() {
+  char c = 0;
+  int nok = 1;
+  int ret = 0;
+  term_mode_raw();
+  printf("[%4d] Continue y / n / a ? ", compteur_exe);
+  while (nok) {
+    c = fgetc(stdin_terminal);
+    if (c == 'y') {
+      printf("y");
+      ret = 1;
+      nok = 0;
+    } else if (c == 'n') {
+      printf("n");
+      ret = 0;
+      nok = 0;
+    } else if (c == 'a') {
+      printf("a");
+      ret = 1;
+      nok = 0;
+      mode_stepper = 0;
+    } else {
+      printf("\n[%4d] Continue y / n / a ? ", compteur_exe);
+    }
+  }
+  printf("\n");
+  term_mode_restore();
+  return ret;
+}
+
 void exe(){
   compteur_exe = 0;
   // Tant que l'on a des instructions
-  while(programme[compteur_exe].fun != NULL) {
+  while (programme[compteur_exe].fun != NULL) {
+    // On teste si on est en mode stepper, si on veut continuer
+    if (mode_stepper && !user_next_step()) {
+      break;
+    }
     //execution de l'instruction
     programme[compteur_exe].fun(
 				&(programme[compteur_exe].op1),
