@@ -112,4 +112,9 @@ int user_next_step();
  */
 void debug_instruction(const char *format, ...);
 
+/**
+ * Affiche un message préfixé de l'adresse de l'instruction
+ */
+void display_instruction(const char *format, ...);
+
 #endif//__INTERPRETER_H__
