@@ -177,7 +177,7 @@ void ipop(struct parameter *op1, struct parameter *op2, struct parameter *op3) {
 }
 
 void ical(struct parameter *op1, struct parameter *op2, struct parameter *op3) {
-  verbose_instruction("CAL %d\n", get_parameter_value(op1));
+  verbose_instruction("CAL\n");
   // Push de l'adresse de retour
   struct parameter ret;
   ret.type = PARAM_VALUE;
