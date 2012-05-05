@@ -61,8 +61,8 @@ instruction : tADD expression expression expression {
 	    }
 	    | tAFC expression tSHARP tINTEGER {
 	           struct parameter p;
-		   p.type = PARAM_VALUE;
-		   p.value.val = $4;
+						 p.type = PARAM_VALUE;
+		         p.value.val = $4;
 	      	   set_ins(iafc, &($2), &(p), NULL);
 	    }
 	    | tJMP expression {
@@ -89,8 +89,11 @@ instruction : tADD expression expression expression {
 	    | tPOP expression {
 	      	   set_ins(ipop, &($2), NULL, NULL);
 	    }
-	    | tCAL expression {
-	      	   set_ins(ical, &($2), NULL, NULL);
+	    | tCAL tINTEGER {
+						 struct parameter p;
+		         p.type = PARAM_ADDRESS;
+		         p.address.adr = $2;
+	      	   set_ins(ical, &(p), NULL, NULL);
 	    }
 	    | tRET {
 	      	   set_ins(iret, NULL, NULL, NULL);
