@@ -197,6 +197,7 @@ void ical(struct parameter *op1, struct parameter *op2, struct parameter *op3) {
 void iret(struct parameter *op1, struct parameter *op2, struct parameter *op3) {
   verbose_instruction("RET\n");
   // Affectation de ebp a esp
+  verbose_instruction("COP %p %d\n", get_reg_address(REG_ESP), get_reg_value(REG_EBP));
   set_reg_value(REG_ESP, get_reg_value(REG_EBP));
   // Depile ebp
   struct parameter param;
