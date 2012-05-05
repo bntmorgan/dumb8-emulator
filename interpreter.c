@@ -67,7 +67,8 @@ int user_next_step() {
 }
 
 void exe(){
-  compteur_exe = 0;
+  // On commence à exécuter la fin du fichier (le saut vers le main)
+  compteur_exe = compteur - 1;
   // Tant que l'on a des instructions
   while (programme[compteur_exe].fun != NULL) {
     // On teste si on est sur un breakpoint
@@ -124,7 +125,7 @@ void iafc(struct parameter *op1, struct parameter *op2, struct parameter *op3) {
 void ijmp(struct parameter *op1, struct parameter *op2, struct parameter *op3) {
   // Traitement spécial pour le jump
   if(op1->type == PARAM_ADDRESS) {
-    verbose_instruction("JMP %d\n", op1->address.adr - 1);
+    verbose_instruction("JMP %d\n", op1->address.adr);
     compteur_exe = op1->address.adr - 1; // A cause du compteur_exe++
   }
 }
@@ -180,13 +181,14 @@ void ical(struct parameter *op1, struct parameter *op2, struct parameter *op3) {
   // Push de l'adresse de retour
   struct parameter ret;
   ret.type = PARAM_VALUE;
-  //On stocke compteur_exe et pas compteur_exe+1
-  //(voir incrementation dans exe())
-  ret.value.val = compteur_exe;
+  // On stocke compteur_exe et pas compteur_exe+1
+  // (voir incrementation dans exe())
+  // Comme jmp jumpe a adr - 1 il faut bien le + 1
+  ret.value.val = compteur_exe + 1;
   ipsh(&ret, NULL, NULL);
   
   // Saut a l'adresse de la fonction appelee
-  ijmp(op1,NULL,NULL);
+  ijmp(op1, NULL, NULL);
 }
 
 /**
@@ -209,7 +211,7 @@ void iret(struct parameter *op1, struct parameter *op2, struct parameter *op3) {
   // Pop de la tête de pile
   (*(get_reg_address(REG_ESP)))++;
   
-  ijmp(&ret,NULL,NULL);
+  ijmp(&ret, NULL, NULL);
 }
 
 void set_ins(void (*fun) (struct parameter *, struct parameter *, struct parameter *), struct parameter *op1, struct parameter *op2, struct parameter *op3) {
