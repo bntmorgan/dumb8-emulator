@@ -35,8 +35,9 @@ struct termios new_term_attr;
 void sig_handler(int signum) {
   switch (signum) {
   case SIGINT:
+    printf("\n");
     term_mode_restore();
-    break;
+    exit(0);
   }
 }
 
@@ -50,7 +51,7 @@ void term_init() {
   new_term_attr.c_cc[VMIN] = 1;
   
   sighandler_t sh;
-  // On restore les attributs du terminal quand l'application l'aisse la main ou quitte
+  // On restore les attributs du terminal quand l'application laisse la main ou quitte
   sh = signal(SIGINT, sig_handler);
   if (sh == SIG_ERR) {
     perror("Error while setting SIGINT signal handler");

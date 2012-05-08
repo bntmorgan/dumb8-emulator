@@ -56,6 +56,10 @@ int user_next_step() {
       ret = 1;
       nok = 0;
       mode_stepper = 0;
+	} else if (c == EOF) {
+		printf("EOF");
+        ret = 0;
+		nok = 0;
     } else {
       printf("\n");
       display_instruction("Continue y / n / a ? ");
@@ -99,7 +103,7 @@ void iadd(struct parameter *op1, struct parameter *op2, struct parameter *op3) {
 
 void imul(struct parameter *op1, struct parameter *op2, struct parameter *op3) {
   verbose_instruction("MUL %p %d %d\n", get_parameter_address(op1), get_parameter_value(op2), get_parameter_value(op3));
-    *(get_parameter_address(op1)) = get_parameter_value(op2) * get_parameter_value(op3);
+  *(get_parameter_address(op1)) = get_parameter_value(op2) * get_parameter_value(op3);
 }
 
 void isou(struct parameter *op1, struct parameter *op2, struct parameter *op3) {
