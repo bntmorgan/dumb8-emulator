@@ -95,8 +95,11 @@ instruction : tADD expression expression expression {
 		         p.address.adr = $2;
 	      	   set_ins(ical, &(p), NULL, NULL);
 	    }
-	    | tRET {
-	      	   set_ins(iret, NULL, NULL, NULL);
+	    | tRET tINTEGER{
+			       struct parameter p;
+		         p.type = PARAM_VALUE;
+		         p.value.val = $2;
+	      	   set_ins(iret, &(p), NULL, NULL);
 	    }
 	    ;
 

@@ -212,6 +212,8 @@ void iret(struct parameter *op1, struct parameter *op2, struct parameter *op3) {
   // Pop de la tête de pile
   (*(get_reg_address(REG_ESP)))++;
   
+  // Libération de la pile du nombre de paramètres de la fonction
+  set_reg_value(REG_ESP, get_reg_value(REG_ESP)+get_parameter_value(op1));
   ijmp(&ret, NULL, NULL);
 }
 
