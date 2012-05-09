@@ -39,10 +39,10 @@ expression : tINTEGER {struct parameter p; p.type = PARAM_ADDRESS; p.address.adr
            ;
 
 registers : tEBP {} //Par defaut $$ = $1
-         | tESP {}
-         | tEAX {}
-         | tEBX {}
-	 ;
+          | tESP {}
+          | tEAX {}
+          | tEBX {}
+	  ;
 
 instruction : tADD expression expression expression {
   	      	   set_ins(iadd, &($2), &($3), &($4));
@@ -61,8 +61,8 @@ instruction : tADD expression expression expression {
 	    }
 	    | tAFC expression tSHARP tINTEGER {
 	           struct parameter p;
-						 p.type = PARAM_VALUE;
-		         p.value.val = $4;
+	           p.type = PARAM_VALUE;
+		   p.value.val = $4;
 	      	   set_ins(iafc, &($2), &(p), NULL);
 	    }
 	    | tJMP expression {
@@ -89,16 +89,13 @@ instruction : tADD expression expression expression {
 	    | tPOP expression {
 	      	   set_ins(ipop, &($2), NULL, NULL);
 	    }
-	    | tCAL tINTEGER {
-						 struct parameter p;
-		         p.type = PARAM_ADDRESS;
-		         p.address.adr = $2;
-	      	   set_ins(ical, &(p), NULL, NULL);
+	    | tCAL expression {
+	      	   set_ins(ical, &($2), NULL, NULL);
 	    }
 	    | tRET tINTEGER{
-			       struct parameter p;
-		         p.type = PARAM_VALUE;
-		         p.value.val = $2;
+	           struct parameter p;
+		   p.type = PARAM_VALUE;
+		   p.value.val = $2;
 	      	   set_ins(iret, &(p), NULL, NULL);
 	    }
 	    ;
