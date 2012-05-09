@@ -56,10 +56,10 @@ int user_next_step() {
       ret = 1;
       nok = 0;
       mode_stepper = 0;
-	} else if (c == EOF) {
-		printf("EOF");
-        ret = 0;
-		nok = 0;
+    } else if (c == EOF) {
+      printf("EOF");
+      ret = 0;
+      nok = 0;
     } else {
       printf("\n");
       display_instruction("Continue y / n / a ? ");
@@ -246,7 +246,7 @@ int *get_reg_address(int reg) {
 }
 
 void set_reg_value(int reg, int value) {
-    regs[reg] = value;
+  regs[reg] = value;
 }
 
 int *get_parameter_address(struct parameter *op) {
