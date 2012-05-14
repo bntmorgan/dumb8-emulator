@@ -79,7 +79,6 @@ void exe(){
     if (mode_breakpoint && breakpoint_stop(compteur_exe)) {
       display_instruction("*\n");
       mode_stepper = 1;
-		printf("lbb\n");
     }
     // On teste si on est en mode stepper, si on veut continuer
     if (mode_stepper && !user_next_step()) {
