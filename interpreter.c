@@ -127,7 +127,7 @@ void iafc(struct parameter *op1, struct parameter *op2, struct parameter *op3) {
 }
 
 void ijmp(struct parameter *op1, struct parameter *op2, struct parameter *op3) {
-  // Traitement spécial pour le jump
+  // Traitement spécial pour le jump 
   if(op1->type == PARAM_ADDRESS) {
     verbose_instruction("JMP %d\n", op1->address.adr);
     compteur_exe = op1->address.adr - 1; // A cause du compteur_exe++
