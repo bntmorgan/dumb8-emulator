@@ -6,6 +6,8 @@
 
 void yyerror(char *s);
 
+extern int line;
+
 %}
 
 // Declaration des types utilisés
@@ -103,7 +105,7 @@ instruction : tADD expression expression expression {
 %%
 
 void yyerror(char *s){
-  fprintf(stderr, "Vous ne maîtrisez pas les concepts : %s\n", s);
+  fprintf(stderr, "Vous ne maîtrisez pas les concepts : %s, à la ligne %d\n", s, line);
 }
 
 //extern int yydebug;

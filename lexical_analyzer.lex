@@ -2,6 +2,7 @@
 #include <stdlib.h>
 #include <stdio.h>
 #include "syntaxic_analyzer.h"
+int line = 1;
 %}
 
 INTEGER [0-9]+
@@ -34,7 +35,7 @@ ebx {yylval.entier = REG_EBX; return tEBX;}
 "-" {return tMINUS;}
 "#" {return tSHARP;}
 {INTEGER} {yylval.entier = atoi(yytext); return tINTEGER;}
-\n {}
+\n {line++;}
 . {}
 
 %%
