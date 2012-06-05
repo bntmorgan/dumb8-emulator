@@ -34,8 +34,8 @@ instructions : instruction instructions {}
        ;
 
 expression : tINTEGER {struct parameter p; p.type = PARAM_ADDRESS; p.address.adr = $1; $$ = p;}
-           | tHOOKO registers tHOOKC tPLUS tINTEGER {struct parameter p; p.type = PARAM_MEMORY_REG; p.memory_reg.reg = $2; p.memory_reg.n = $5; $$ = p;}
-           | tHOOKO registers tHOOKC tMINUS tINTEGER {struct parameter p; p.type = PARAM_MEMORY_REG; p.memory_reg.reg = $2; p.memory_reg.n = -($5); $$ = p;}
+           | tHOOKO registers tPLUS tINTEGER tHOOKC {struct parameter p; p.type = PARAM_MEMORY_REG; p.memory_reg.reg = $2; p.memory_reg.n = $5; $$ = p;}
+           | tHOOKO registers tMINUS tINTEGER tHOOKC {struct parameter p; p.type = PARAM_MEMORY_REG; p.memory_reg.reg = $2; p.memory_reg.n = -($5); $$ = p;}
            | tHOOKO registers tHOOKC {struct parameter p; p.type = PARAM_MEMORY_REG; p.memory_reg.reg = $2; p.memory_reg.n = 0; $$ = p;}
            | registers {struct parameter p; p.type = PARAM_REG; p.reg.reg = $1; $$ = p;}
            ;
