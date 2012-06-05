@@ -40,7 +40,7 @@ int user_next_step() {
   int nok = 1;
   int ret = 0;
   term_mode_raw();
-  display_instruction("Continue y / n / a ? ");
+  display_instruction("Continue y / n / a / s / f ? ");
   while (nok) {
     c = fgetc(stdin_terminal);
     if (c == 'y') {
@@ -56,13 +56,19 @@ int user_next_step() {
       ret = 1;
       nok = 0;
       mode_stepper = 0;
+    } else if (c == 's') {
+      stack_dump(0);
+      display_instruction("Continue y / n / a / s / f ? ");
+    } else if (c == 'f') {
+      stack_dump(1);
+      display_instruction("Continue y / n / a / s / f ? ");
     } else if (c == EOF) {
       printf("EOF");
       ret = 0;
       nok = 0;
     } else {
       printf("\n");
-      display_instruction("Continue y / n / a ? ");
+      display_instruction("Continue y / n / a / s / f ? ");
     }
   }
   printf("\n");
@@ -289,4 +295,20 @@ int get_parameter_value(struct parameter *op) {
     exit(1);
   }
   return 0;
+}
+
+void stack_dump(int frame) {
+  int stack_bottom;
+  if (frame) {
+    stack_bottom = get_reg_value(REG_EBP);
+  } else {
+    stack_bottom = MEMORY_SIZE;
+  }
+  int stack_top = get_reg_value(REG_ESP);
+  // Dumps the stack
+  printf("\n---- stack ----\n");
+  for (; stack_bottom >= stack_top && stack_bottom >= 0; --stack_bottom) {
+    printf("%4x | %08x\n", stack_bottom, memory[stack_bottom]);
+  }
+  printf("-----------------\n");
 }

@@ -117,4 +117,9 @@ void debug_instruction(const char *format, ...);
  */
 void display_instruction(const char *format, ...);
 
+/**
+ * Dumps the stack from the base to the top (esp)
+ */
+void stack_dump();
+
 #endif//__INTERPRETER_H__
