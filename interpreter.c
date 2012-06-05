@@ -92,10 +92,10 @@ void exe(){
     }
     //execution de l'instruction
     programme[compteur_exe].fun(
-				&(programme[compteur_exe].op1),
-				&(programme[compteur_exe].op2),
-				&(programme[compteur_exe].op3)
-				);
+        &(programme[compteur_exe].op1),
+        &(programme[compteur_exe].op2),
+        &(programme[compteur_exe].op3)
+        );
     // Instruction suivante
     compteur_exe++;
   }

@@ -50,18 +50,18 @@ struct parameter {
 
 // Définition d'une instruction
 struct instruction {
-       void (*fun) (struct parameter *, struct parameter *, struct parameter *);
-       struct parameter op1;
-       struct parameter op2;
-       struct parameter op3;
+  void (*fun) (struct parameter *, struct parameter *, struct parameter *);
+  struct parameter op1;
+  struct parameter op2;
+  struct parameter op3;
 };
 
 // Registres
 enum {
-     REG_EBP = 0,
-     REG_ESP = 1,
-     REG_EAX = 2,
-     REG_EBX = 3,
+  REG_EBP = 0,
+  REG_ESP = 1,
+  REG_EAX = 2,
+  REG_EBX = 3,
 };
 
 void iadd(struct parameter *op1, struct parameter *op2, struct parameter *op3);

@@ -30,8 +30,8 @@ extern int line;
 %%
 
 instructions : instruction instructions {}
-       |
-       ;
+             |
+             ;
 
 expression : tINTEGER {struct parameter p; p.type = PARAM_ADDRESS; p.address.adr = $1; $$ = p;}
            | tHOOKO registers tPLUS tINTEGER tHOOKC {struct parameter p; p.type = PARAM_MEMORY_REG; p.memory_reg.reg = $2; p.memory_reg.n = $5; $$ = p;}
@@ -47,58 +47,58 @@ registers : tEBP {} //Par defaut $$ = $1
           ;
 
 instruction : tADD expression expression expression {
-               set_ins(iadd, &($2), &($3), &($4));
+              set_ins(iadd, &($2), &($3), &($4));
             }
             | tMUL expression expression expression {
-                   set_ins(imul, &($2), &($3), &($4));
+              set_ins(imul, &($2), &($3), &($4));
             }
             | tSOU expression expression expression {
-                   set_ins(isou, &($2), &($3), &($4));
+              set_ins(isou, &($2), &($3), &($4));
             }
             | tDIV expression expression expression {
-                   set_ins(idiv, &($2), &($3), &($4));
+              set_ins(idiv, &($2), &($3), &($4));
             }
             | tCOP expression expression {
-                   set_ins(icop, &($2), &($3), NULL);
+              set_ins(icop, &($2), &($3), NULL);
             }
             | tAFC expression tSHARP tINTEGER {
-                   struct parameter p;
-                   p.type = PARAM_VALUE;
-                   p.value.val = $4;
-                   set_ins(iafc, &($2), &(p), NULL);
+              struct parameter p;
+              p.type = PARAM_VALUE;
+              p.value.val = $4;
+              set_ins(iafc, &($2), &(p), NULL);
             }
             | tJMP expression {
-                   set_ins(ijmp, &($2), NULL, NULL);
+              set_ins(ijmp, &($2), NULL, NULL);
             }
             | tJMF expression expression {
-                   set_ins(ijmf, &($2), &($3), NULL);
+              set_ins(ijmf, &($2), &($3), NULL);
             }
             | tINF expression expression expression {
-                   set_ins(iinf, &($2), &($3), &($4));
+              set_ins(iinf, &($2), &($3), &($4));
             }
             | tSUP expression expression expression {
-                   set_ins(isup, &($2), &($3), &($4));
+              set_ins(isup, &($2), &($3), &($4));
             }
             | tEQU expression expression expression {
-                   set_ins(iequ, &($2), &($3), &($4));
+              set_ins(iequ, &($2), &($3), &($4));
             }
             | tPRI expression {
-                   set_ins(ipri, &($2), NULL, NULL);
+              set_ins(ipri, &($2), NULL, NULL);
             }     
             | tPSH expression {
-                   set_ins(ipsh, &($2), NULL, NULL);
+              set_ins(ipsh, &($2), NULL, NULL);
             }
             | tPOP expression {
-                   set_ins(ipop, &($2), NULL, NULL);
+              set_ins(ipop, &($2), NULL, NULL);
             }
             | tCAL expression {
-                   set_ins(ical, &($2), NULL, NULL);
+              set_ins(ical, &($2), NULL, NULL);
             }
             | tRET tINTEGER{
-                   struct parameter p;
-                   p.type = PARAM_VALUE;
-                   p.value.val = $2;
-                   set_ins(iret, &(p), NULL, NULL);
+              struct parameter p;
+              p.type = PARAM_VALUE;
+              p.value.val = $2;
+              set_ins(iret, &(p), NULL, NULL);
             }
             ;
 
