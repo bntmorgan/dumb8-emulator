@@ -40,7 +40,7 @@ int user_next_step() {
   int nok = 1;
   int ret = 0;
   term_mode_raw();
-  display_instruction("Continue y / n / a / s / f ? ");
+  display_instruction(STEPPER_MESSAGE);
   while (nok) {
     c = fgetc(stdin_terminal);
     if (c == 'y') {
@@ -58,17 +58,17 @@ int user_next_step() {
       mode_stepper = 0;
     } else if (c == 's') {
       stack_dump(0);
-      display_instruction("Continue y / n / a / s / f ? ");
+      display_instruction(STEPPER_MESSAGE);
     } else if (c == 'f') {
       stack_dump(1);
-      display_instruction("Continue y / n / a / s / f ? ");
+      display_instruction(STEPPER_MESSAGE);
     } else if (c == EOF) {
       printf("EOF");
       ret = 0;
       nok = 0;
     } else {
       printf("\n");
-      display_instruction("Continue y / n / a / s / f ? ");
+      display_instruction(STEPPER_MESSAGE);
     }
   }
   printf("\n");

@@ -4,6 +4,7 @@
 #define MAX_INSTRUCTIONS 1024
 #define MEMORY_SIZE 1024
 #define REGS_SIZE 2
+#define STEPPER_MESSAGE "Continue y / n / a / s / f ? "
 
 // Maintenant qu'on doit gérer les adresses et les registres
 // On doit différencier les paramètres d'un instruction
