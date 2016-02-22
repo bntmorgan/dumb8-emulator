@@ -25,4 +25,4 @@ options: options.c
 	gcc -g -Wall -c options.c
 
 asm_interpreter : yacc lex interpreter options
-	gcc -g -Wall -o asm_interpreter interpreter.o options.o lexical_analyzer.c syntaxic_analyzer.c -ll -ly
+	gcc -g -Wall -o asm_interpreter interpreter.o options.o lexical_analyzer.c syntaxic_analyzer.c -lfl -ly

@@ -1,4 +1,3 @@
-/*
 Copyright (C) 2012  Carla Sauvanaud
 Copyright (C) 2012, 2016 Benoît Morgan
 
@@ -16,12 +15,3 @@ GNU General Public License for more details.
 
 You should have received a copy of the GNU General Public License
 along with dumb8-emulator.  If not, see <http://www.gnu.org/licenses/>.
-*/
-
-	AFC [ebp] 2
-	CAL 4
-	AFC [ebp] 4
-	PRI [ebp]
-	AFC [ebp] 5
-	PRI [ebp]	
-	RET
