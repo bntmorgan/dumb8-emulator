@@ -23,7 +23,7 @@ along with dumb8-emulator.  If not, see <http://www.gnu.org/licenses/>.
 #include <stdarg.h>
 #include "options.h"
 #include "interpreter.h"
-#include "syntaxic_analyzer.h"
+#include "parser.h"
 
 // Compteur des intructions du programme
 int compteur = 0;

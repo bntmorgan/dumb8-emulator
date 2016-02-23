@@ -23,6 +23,7 @@ along with dumb8-emulator.  If not, see <http://www.gnu.org/licenses/>.
 #include <stdio.h>
 #include "interpreter.h"
 #include "options.h"
+#include "lexer.h"
 
 void yyerror(char *s);
 

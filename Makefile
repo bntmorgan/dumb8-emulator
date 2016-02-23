@@ -1,28 +1,67 @@
-all : asm_interpreter
+CC						:= gcc
+LD						:= gcc
+LX						:= lex
+YC						:= yacc
+BUILD_DIR			:= build
+BINARY_DIR		:= binary
 
-test : asm_interpreter
-	./asm_interpreter test.s
+CC_FLAGS_ALL		:= -Wall -Werror -Werror -Isources/include
 
-test_stack: asm_interpreter
-	./asm_interpreter test_stack.s
+LD_FLAGS_ALL		:=
 
-test_reg : asm_interpreter
-	./asm_interpreter test_reg.s
+define SRC_2_OBJ
+  $(foreach src,$(1),$(patsubst sources/%,$(BUILD_DIR)/%,$(src)))
+endef
 
-test_call : asm_interpreter
-	./asm_interpreter test_call.s
+define SRC_2_BIN
+  $(foreach src,$(1),$(patsubst sources/%,$(BINARY_DIR)/%,$(src)))
+endef
 
-yacc : syntaxic_analyzer.y
-	bison -d -o syntaxic_analyzer.c syntaxic_analyzer.y
+all: targets
 
-lex : lexical_analyzer.lex
-	lex -o lexical_analyzer.c lexical_analyzer.lex
+# Overriden in rules.mk
+TARGETS :=
+OBJECTS :=
 
-interpreter: interpreter.c
-	gcc -g -Wall -c interpreter.c
+dir	:= sources
+include	$(dir)/rules.mk
 
-options: options.c
-	gcc -g -Wall -c options.c
+$(BINARY_DIR)/%:
+	@echo "[LD] $@"
+	@mkdir -p $(dir $@)
+	@$(LD) -o $@ $(LD_OBJECTS) $(LD_FLAGS_TARGET)
 
-asm_interpreter : yacc lex interpreter options
-	gcc -g -Wall -o asm_interpreter interpreter.o options.o lexical_analyzer.c syntaxic_analyzer.c -lfl -ly
+$(BUILD_DIR)/%.o: sources/%.c
+	@echo "[CC] $< -> $@"
+	@mkdir -p $(dir $@)
+	@$(CC) $(CC_FLAGS_ALL) $(CC_FLAGS_TARGET) -o $@ -c $<
+
+$(BUILD_DIR)/%.o: $(BUILD_DIR)/%.c
+	@echo "[CC] $< -> $@"
+	@mkdir -p $(dir $@)
+	@$(CC) $(CC_FLAGS_ALL) $(CC_FLAGS_TARGET) -o $@ -c $<
+
+$(BUILD_DIR)/%.h: $(BUILD_DIR)/%.c
+	@#
+
+$(BUILD_DIR)/%.c: sources/%.y
+	@echo "[YC] $< -> $@"
+	@mkdir -p $(dir $@)
+	@$(YC) -d -o $@ $<
+
+$(BUILD_DIR)/%.c: sources/%.l
+	@echo "[LX] $< -> $@"
+	@mkdir -p $(dir $@)
+	@$(LX) --header-file=$(subst .c,.h,$@) -o $@ $<
+
+targets: $(TARGETS)
+
+clean:
+	@rm -fr $(BUILD_DIR) $(BINARY_DIR)
+
+info:
+	@echo Targets [$(TARGETS)]
+	@echo Objects [$(OBJECTS)]
+
+# Remove default rulez
+.SUFFIXES:

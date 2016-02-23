@@ -1,9 +1,12 @@
 %{
 #include <stdlib.h>
 #include <stdio.h>
-#include "syntaxic_analyzer.h"
+#include "parser.h"
 int line = 1;
 %}
+
+%option noinput
+%option nounput
 
 INTEGER [0-9]+
 
