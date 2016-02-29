@@ -105,7 +105,7 @@ instruction : tADD expression expression expression {
             }
             | tPRI expression {
               set_ins(ipri, &($2), NULL, NULL);
-            }     
+            }
             | tPSH expression {
               set_ins(ipsh, &($2), NULL, NULL);
             }
@@ -137,5 +137,5 @@ int main(int argc, char **argv) {
   yyparse();
   exe();
   close_files();
-  return 0;  
+  return 0;
 }
